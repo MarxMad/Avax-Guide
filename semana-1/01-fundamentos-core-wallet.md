@@ -119,7 +119,9 @@ sequenceDiagram
    - Crear o importar wallet y **guardar la frase de recuperación** en un lugar seguro.
 
 2. **Obtener AVAX de prueba (Fuji):**
-   - [Fuji Faucet](https://faucet.avax.network/) o [Core Faucet](https://core.app/tools/testnet-faucet/).
+   - [Faucet Fuji (oficial)](https://faucet.avax.network/)
+   - [Core Testnet Faucet](https://core.app/tools/testnet-faucet) — integrado en Core: conectar wallet y solicitar.
+   - [Builder Hub — Testnet Faucet](https://build.avax.network/console/primary-network/faucet) — desde la consola del Builders Hub (Red Primaria / Fuji).
    - Seleccionar **Fuji** y la **C-Chain** para desarrollo de contratos.
    - Pegar tu dirección (C-Chain) y solicitar fondos.
 
@@ -157,6 +159,8 @@ flowchart LR
 - [Avalanche Builder Hub — Architecture](https://build.avax.network/docs/nodes/architecture)
 - [Docs Avalanche — Getting Started](https://docs.avax.network/overview/getting-started/avalanche-platform)
 - [Core Wallet](https://core.app/)
-- [Fuji Faucet](https://faucet.avax.network/)
+- [Fuji Faucet (oficial)](https://faucet.avax.network/)
+- [Core Testnet Faucet](https://core.app/tools/testnet-faucet)
+- [Builder Hub — Testnet Faucet](https://build.avax.network/console/primary-network/faucet)
 
 [← Volver al índice](../../README.md) · [Siguiente: C-Chain y Solidity →](./02-c-chain-solidity-fuji.md)

@@ -31,9 +31,14 @@ Recursos centrales para el Bootcamp Avalanche.
 
 ## Wallets y faucets
 
-- **Core Wallet:** https://core.app/
-- **Faucet Fuji (oficial):** https://faucet.avax.network/
-- **Core Testnet Faucet:** https://core.app/tools/testnet-faucet/
+| Recurso | URL | Uso |
+|---------|-----|-----|
+| **Core Wallet** | https://core.app/ | Wallet oficial (extensión y móvil) |
+| **Faucet Fuji (oficial)** | https://faucet.avax.network/ | AVAX de prueba para Fuji |
+| **Core Testnet Faucet** | https://core.app/tools/testnet-faucet | Faucet integrado en Core (conectar wallet y solicitar) |
+| **Builder Hub — Testnet Faucet** | https://build.avax.network/console/primary-network/faucet | Faucet desde la consola del Builders Hub (Red Primaria / Fuji) |
+
+Para desarrollo en C-Chain (Fuji), solicita fondos en **C-Chain** y usa cualquiera de los faucets anteriores. El de Core y el del Builder Hub suelen requerir conectar wallet.
 
 ---
 

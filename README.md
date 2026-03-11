@@ -26,8 +26,8 @@ Esta es la guía de referencia del **Bootcamp Avalanche**: 4 semanas, 8 sesiones
 | **1** | 2 | 4 mar | C-Chain (EVM), Solidity avanzado, Fuji | [Semana 1 - Sesión 2](./semana-1/02-c-chain-solidity-fuji.md) |
 | **2** | 1 | 9 mar | L1s, Avalanche9000, red personalizada local | [Semana 2 - Sesión 1](./semana-2/01-subnets-avalanche9000.md) |
 | **2** | 2 | 11 mar | Teleporter y Cross-Chain (AWM) | [Semana 2 - Sesión 2](./semana-2/02-teleporter-awm.md) |
-| **3** | 1 | 16 mar | Lean Canvas, modelos Web3, equipos | [Semana 3 - Sesión 1](./semana-3/01-lean-canvas-equipos.md) |
-| **3** | 2 | 18 mar | Frontend (Ethers/Viem), indexación | [Semana 3 - Sesión 2](./semana-3/02-frontend-indexacion.md) |
+| **3** | 1 | 16 mar | Frontend (Ethers/Viem), indexación, **prototipado** | [Semana 3 - Sesión 1](./semana-3/01-frontend-indexacion.md) |
+| **3** | 2 | 18 mar | Lean Canvas, modelos Web3, equipos | [Semana 3 - Sesión 2](./semana-3/02-lean-canvas-equipos.md) |
 | **4** | 1 | 23 mar | QA, pruebas de estrés, seguridad | [Semana 4 - Sesión 1](./semana-4/01-seguridad-qa.md) |
 | **4** | 2 | 25 mar | Demo Day, Grants, certificados on-chain | [Semana 4 - Sesión 2](./semana-4/02-demo-day.md) |
 
@@ -65,5 +65,13 @@ Avax-Guide/
 
 - [Enlaces oficiales y documentación](./recursos/enlaces.md)
 - [Herramientas recomendadas](./recursos/herramientas.md)
+
+### 💧 Faucets (AVAX de prueba para Fuji)
+
+| Recurso | Enlace |
+|---------|--------|
+| Faucet oficial | [faucet.avax.network](https://faucet.avax.network/) |
+| Core Testnet Faucet | [core.app/tools/testnet-faucet](https://core.app/tools/testnet-faucet) |
+| Builder Hub — Testnet Faucet | [build.avax.network/console/primary-network/faucet](https://build.avax.network/console/primary-network/faucet) |
 
 *¡Construye en la red más rápida del mundo!* 🚀
