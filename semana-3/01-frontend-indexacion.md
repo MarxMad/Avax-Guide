@@ -1,7 +1,7 @@
 # Semana 3 · Sesión 1 — Frontend, indexación y prototipado
 
 **Fecha:** 16 de marzo  
-**Instructor:** Invitado Team1  
+**Instructor:** Gerardo Vela  
 **Tema:** Workshop técnico: frontend (Ethers.js / Viem), conexión a Fuji, indexación básica y **arranque del prototipo** para el MVP.
 
 ---
@@ -38,7 +38,7 @@ flowchart LR
 | **Framework** | React + Vite | Next.js |
 | **Librería blockchain** | Ethers.js v6 | Viem |
 | **Wallet** | Core / MetaMask (window.ethereum) | Wagmi + RainbowKit (opcional) |
-| **Red** | Fuji (C-Chain) | Fuji + tu subnet (si aplica) |
+| **Red** | Fuji (C-Chain) | Fuji + tu L1 (si aplica) |
 
 Para avanzar rápido, **React + Vite + Ethers** (o Viem) es suficiente. Wagmi/RainbowKit puedes añadirlos después si quieres mejor UX de conexión.
 

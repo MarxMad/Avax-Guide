@@ -16,7 +16,7 @@
 
 ## 1. ¿Por qué interoperabilidad?
 
-En un ecosistema con muchas L1s y subnets (C-Chain, tu Subnet-EVM, otras subnets), las dApps a menudo necesitan:
+En un ecosistema con muchas **L1s** (C-Chain, tu L1 con Subnet-EVM, otras cadenas), las dApps a menudo necesitan:
 
 - **Mover valor o datos** de una cadena a otra.
 - **Disparar lógica** en otra cadena (ejecutar una función en un contrato remoto).
@@ -56,7 +56,7 @@ flowchart LR
 
 ### Qué es AWM
 
-**Avalanche Warp Messaging** es el protocolo **nativo** de Avalanche para enviar mensajes entre blockchains (p. ej. C-Chain ↔ tu Subnet-EVM). Las **firmas de los validadores** son la prueba de que el mensaje existió en la cadena origen; la cadena destino tiene un **precompilado** para verificar esas firmas.
+**Avalanche Warp Messaging** es el protocolo **nativo** de Avalanche para enviar mensajes entre blockchains (p. ej. C-Chain ↔ tu L1 con Subnet-EVM). Las **firmas de los validadores** son la prueba de que el mensaje existió en la cadena origen; la cadena destino tiene un **precompilado** para verificar esas firmas.
 
 ```mermaid
 flowchart TB
@@ -65,7 +65,7 @@ flowchart TB
         Tx --> Log[Evento / Estado]
     end
 
-    subgraph Validadores["Validadores de la subnet origen"]
+    subgraph Validadores["Validadores de la L1 origen"]
         V1[Validador 1]
         V2[Validador 2]
         V3[Validador 3]
@@ -75,7 +75,7 @@ flowchart TB
     Log --> Validadores
     Firma --> Destino
 
-    subgraph Destino["Cadena destino (ej. Subnet-EVM)"]
+    subgraph Destino["Cadena destino (ej. tu L1 EVM)"]
         Precompile[Precompilado AWM]
         Precompile --> Verificar[Verifica firmas]
         Verificar --> Contrato[Contrato destino ejecuta]
@@ -280,7 +280,7 @@ flowchart TB
     subgraph Practica["Práctica"]
         G[Contrato origen]
         H[Contrato destino ITeleporterReceiver]
-        I[Probar en Fuji / subnets]
+        I[Probar en Fuji / tu L1]
     end
 
     A --> B --> C
@@ -302,7 +302,7 @@ flowchart TB
 - Revisar un **ejemplo oficial** de contrato que envía/recibe con Teleporter en [ava-labs/teleporter](https://github.com/ava-labs/teleporter).
 - Entender el flujo: **emisor → TeleporterMessenger → AWM → relayer → TeleporterMessenger → receptor**.
 - Anotar diferencias entre “puente tradicional” y AWM/Teleporter (confianza, verificación, complejidad).
-- Comprobar en qué redes está disponible Teleporter (Fuji, mainnet, tu subnet).
+- Comprobar en qué redes está disponible Teleporter (Fuji, mainnet, tu L1).
 
 ---
 
@@ -311,7 +311,7 @@ flowchart TB
 - [ ] Explicar con tus palabras qué es AWM y qué es Teleporter.
 - [ ] Entender el papel del relayer (entrega vs verificación).
 - [ ] Haber visto al menos un ejemplo de mensaje cross-chain en la sesión.
-- [ ] Saber en qué subnets/RPCs está disponible Teleporter (Fuji, mainnet, custom).
+- [ ] Saber en qué L1s/RPCs está disponible Teleporter (Fuji, mainnet, custom).
 
 ---
 
@@ -324,4 +324,4 @@ flowchart TB
 - [Builders Hub — Teleporter](https://build.avax.network/docs/cross-chain/teleporter/getting-started)
 - [AWM Relayer — GitHub](https://github.com/ava-labs/awm-relayer)
 
-[← Subnets y Avalanche9000](./01-subnets-avalanche9000.md) · [Volver al índice](../../README.md) · [Siguiente: Frontend y prototipado →](../semana-3/01-frontend-indexacion.md)
+[← L1s y Avalanche9000](./01-subnets-avalanche9000.md) · [Volver al índice](../../README.md) · [Siguiente: Frontend y prototipado →](../semana-3/01-frontend-indexacion.md)

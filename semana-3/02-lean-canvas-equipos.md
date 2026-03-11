@@ -1,6 +1,7 @@
 # Semana 3 · Sesión 2 — Lean Canvas y formación de equipos
 
 **Fecha:** 18 de marzo  
+**Instructor:** Gerardo Vela  
 **Tema:** Diseño de modelos de negocio Web3, Lean Canvas y formación de equipos con mentores. Alinear el **prototipo** de la Sesión 1 con propuesta de valor y alcance del MVP.
 
 ---

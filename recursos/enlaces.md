@@ -11,7 +11,7 @@ Recursos centrales para el Bootcamp Avalanche.
 | Docs principales | https://docs.avax.network/ | Referencia general |
 | Getting Started | https://docs.avax.network/overview/getting-started/avalanche-platform | Primera lectura |
 | C-Chain / Smart contracts | https://docs.avax.network/dapps/smart-contracts/contract-chain-c-chain | Desarrollo EVM |
-| Subnets | https://docs.avax.network/subnets | L1s y subnets |
+| Subnets (concepto técnico de L1s) | https://docs.avax.network/subnets | L1s y subnets |
 | Avalanche Warp Messaging | https://docs.avax.network/dapps/smart-contracts/avalanche-warp-messaging | AWM |
 | Teleporter | https://docs.avax.network/dapps/smart-contracts/teleporter | Cross-chain |
 

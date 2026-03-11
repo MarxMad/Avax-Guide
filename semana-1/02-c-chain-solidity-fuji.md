@@ -217,4 +217,4 @@ sequenceDiagram
 - [Hardhat](https://hardhat.org/)
 - [Fuji Snowtrace](https://testnet.snowtrace.io/)
 
-[← Sesión 1: Fundamentos](./01-fundamentos-core-wallet.md) · [Volver al índice](../../README.md) · [Siguiente: Subnets →](../semana-2/01-subnets-avalanche9000.md)
+[← Sesión 1: Fundamentos](./01-fundamentos-core-wallet.md) · [Volver al índice](../../README.md) · [Siguiente: L1s y Avalanche9000 →](../semana-2/01-subnets-avalanche9000.md)

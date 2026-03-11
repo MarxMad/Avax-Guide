@@ -21,12 +21,12 @@ La **Red Primaria** de Avalanche está formada por **tres cadenas** con roles co
 
 | Cadena | Nombre completo | Función principal | VM / Consenso |
 |--------|-----------------|-------------------|----------------|
-| **P-Chain** | Platform Chain | Validadores, staking, subnets, creación de blockchains | PlatformVM, Snowman++ |
+| **P-Chain** | Platform Chain | Validadores, staking, L1s, creación de blockchains | PlatformVM, Snowman++ |
 | **X-Chain** | Exchange Chain | Creación e intercambio de activos (AVAX, NFTs) | AVM, Snowman |
 | **C-Chain** | Contract Chain | Smart contracts y dApps (EVM) | Coreth (EVM), Snowman++ |
 
 - **Finalidad:** sub-segundos (vs minutos en otras redes).
-- **Escalabilidad:** subnets y L1s personalizadas sin congestionar la red principal.
+- **Escalabilidad:** L1s personalizadas sin congestionar la red principal.
 
 ### Diagrama: Red Primaria (P, X, C-Chain)
 
@@ -38,7 +38,7 @@ flowchart TB
         C["C-Chain (Contract)"]
     end
 
-    P --> |"Validadores, Subnets, Staking"| Meta[Metadatos y orquestación]
+    P --> |"Validadores, L1s, Staking"| Meta[Metadatos y orquestación]
     X --> |"Activos, NFTs, UTXO"| Assets[Creación e intercambio de activos]
     C --> |"EVM, Smart Contracts"| Dapps[dApps y contratos]
 

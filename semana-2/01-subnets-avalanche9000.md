@@ -1,21 +1,21 @@
-# Semana 2 · Sesión 1 — Subnets y Avalanche9000
+# Semana 2 · Sesión 1 — L1s y Avalanche9000
 
 **Fecha:** 9 de marzo  
 **Instructor:** Andrés Rodriguez  
-**Tema:** Revolución de las L1s, arquitectura Avalanche9000 y lanzamiento de una red personalizada local.
+**Tema:** Revolución de las L1s, arquitectura Avalanche9000 y lanzamiento de una red personalizada local (tu propia L1).
 
 ---
 
 ## Objetivos de la sesión
 
-- Entender el modelo de **subnets** y L1s personalizadas en Avalanche.
-- Diferenciar Red Primaria vs subnet y cuándo crear la tuya.
+- Entender el modelo de **L1s personalizadas** en Avalanche (y el concepto técnico de subnet que las soporta).
+- Diferenciar Red Primaria vs tu L1 y cuándo crear la tuya.
 - Conocer la arquitectura **Avalanche9000** y su impacto.
 - Lanzar una **red personalizada local** con Avalanche CLI y Subnet-EVM.
 
 ---
 
-## 1. De la Red Primaria a las Subnets
+## 1. De la Red Primaria a tu propia L1
 
 ### ¿Qué es la Red Primaria?
 
@@ -34,7 +34,7 @@ flowchart TB
     V --> X
     V --> C
 
-    P --> |Metadatos, Subnets| Meta[Orquestación]
+    P --> |Metadatos, L1s| Meta[Orquestación]
     X --> |Activos| Assets[Exchange]
     C --> |Contratos| Dapps[EVM dApps]
 
@@ -45,24 +45,26 @@ flowchart TB
     style V fill:#e84142,color:#fff
 ```
 
-### ¿Qué es una Subnet?
+### ¿Qué es una L1? (y qué es una subnet en Avalanche)
 
-Una **subnet** (subred) es un **conjunto de validadores** que acuerda validar **una o más blockchains**. Es decir:
+En Avalanche, cuando hablamos de **tu propia L1** nos referimos a **tu blockchain personalizada** (por ejemplo una cadena EVM con sus propias reglas). Esa L1 no corre sola: necesita un **conjunto de validadores** que consensúen sus bloques. Ese conjunto es lo que técnicamente se llama **subnet** (subred).
 
-- **No** es “una blockchain más”: es la **regla de quién valida qué**.
-- Una blockchain puede ser EVM (Subnet-EVM), AVM u otra VM personalizada.
-- Esas blockchains solo son validadas por los nodos que pertenecen a esa subnet.
+- La **subnet** no es “una blockchain más”: es la **regla de quién valida qué** (qué nodos validan tu L1).
+- Tu **L1** es la blockchain en sí (EVM con Subnet-EVM, AVM, o una VM personalizada).
+- Esa blockchain solo es validada por los nodos que pertenecen a esa subnet.
+
+Para no confundirte: en esta guía usamos **L1** para “tu blockchain” y **subnet** solo cuando hablemos del concepto técnico (la red de validadores).
 
 ```mermaid
 flowchart LR
-    subgraph SubnetA["Subnet A"]
+    subgraph L1A["L1 A (tu blockchain)"]
         V1[Validador 1]
         V2[Validador 2]
         V3[Validador 3]
         BC1[Blockchain 1]
     end
 
-    subgraph SubnetB["Subnet B"]
+    subgraph L1B["L1 B (otra blockchain)"]
         V4[Validador 4]
         V5[Validador 5]
         BC2[Blockchain 2]
@@ -71,36 +73,36 @@ flowchart LR
     V1 & V2 & V3 --> BC1
     V4 & V5 --> BC2
 
-    style SubnetA fill:#0f3460,stroke:#e94560,color:#fff
-    style SubnetB fill:#0f3460,stroke:#e94560,color:#fff
+    style L1A fill:#0f3460,stroke:#e94560,color:#fff
+    style L1B fill:#0f3460,stroke:#e94560,color:#fff
     style BC1 fill:#e94560,color:#fff
     style BC2 fill:#e94560,color:#fff
 ```
 
-### Red Primaria vs Subnet — Resumen
+### Red Primaria vs tu L1 — Resumen
 
-| Concepto | Red Primaria | Tu Subnet (L1 personalizada) |
-|----------|--------------|------------------------------|
-| **Quién valida** | Todos los validadores de AVAX | Solo los validadores que tú (o el creador) añadan |
-| **Cadenas** | P, X, C-Chain (fijas) | Las que definas (p. ej. una Subnet-EVM) |
+| Concepto | Red Primaria | Tu L1 personalizada |
+|----------|--------------|----------------------|
+| **Quién valida** | Todos los validadores de AVAX | Solo los validadores que tú (o el creador) añadan a la subnet |
+| **Cadenas** | P, X, C-Chain (fijas) | Las que definas (p. ej. una blockchain Subnet-EVM) |
 | **Gas / token** | AVAX en C-Chain | Configurable (AVAX o token propio) |
 | **Soberanía** | Reglas globales de Avalanche | Tú eliges reglas de gas, gobernanza, VM |
 | **Uso típico** | dApps generales en C-Chain | Juegos, DeFi aislada, enterprise, compliance |
 
-### Flujo: “¿Cuándo creo mi propia subnet?”
+### Flujo: “¿Cuándo creo mi propia L1?”
 
 ```mermaid
 flowchart TD
     Start[¿Necesitas tu propia L1?] --> Q1{¿Reglas de gas<br/>o token propio?}
-    Q1 -->|Sí| Subnet[Crear Subnet + Blockchain]
+    Q1 -->|Sí| L1[Crear tu L1 + subnet]
     Q1 -->|No| Q2{¿Aislamiento<br/>o compliance?}
-    Q2 -->|Sí| Subnet
+    Q2 -->|Sí| L1
     Q2 -->|No| CChain[Usar C-Chain es suficiente]
 
-    Subnet --> CLI[Avalanche CLI]
+    L1 --> CLI[Avalanche CLI]
     CLI --> Deploy[Desplegar Subnet-EVM<br/>local / Fuji / Mainnet]
 
-    style Subnet fill:#e94560,color:#fff
+    style L1 fill:#e94560,color:#fff
     style CChain fill:#00b894,color:#fff
     style Deploy fill:#0984e3,color:#fff
 ```
@@ -109,7 +111,7 @@ flowchart TD
 
 ## 2. Arquitectura Avalanche9000
 
-**Avalanche9000** es la evolución de la plataforma Avalanche: mejor throughput, finalidad más rápida y una experiencia más flexible para desarrolladores y subnets.
+**Avalanche9000** es la evolución de la plataforma Avalanche: mejor throughput, finalidad más rápida y una experiencia más flexible para desarrolladores y L1s personalizadas.
 
 ### Visión de capas (simplificado)
 
@@ -117,7 +119,7 @@ flowchart TD
 flowchart TB
     subgraph App["Capa de aplicación"]
         Dapps[dApps]
-        Subnets[Subnets / L1s]
+        Subnets[L1s personalizadas]
     end
 
     subgraph Avalanche9000["Avalanche9000"]
@@ -143,26 +145,26 @@ flowchart TB
 
 - **Rendimiento:** más transacciones por segundo y mejor uso de recursos.
 - **Finalidad:** tiempos de confirmación aún más bajos.
-- **Desarrolladores:** herramientas y APIs mejoradas para crear y operar subnets/L1s.
+- **Desarrolladores:** herramientas y APIs mejoradas para crear y operar L1s.
 - **Futuro:** base para las próximas generaciones de L1s en el ecosistema.
 
-La documentación oficial se actualiza en [Docs Avalanche](https://docs.avax.network/) y [Builders Hub](https://build.avax.network/docs); busca "Avalanche 9000" o "Subnets".
+La documentación oficial se actualiza en [Docs Avalanche](https://docs.avax.network/) y [Builders Hub](https://build.avax.network/docs); busca "Avalanche 9000" o "L1" / "Subnets".
 
 ### Imagen de referencia — Builders Hub
 
-<!-- ========== ESPACIO PARA IMAGEN: Avalanche9000 / Subnets ========== -->
-<!-- Guardar como ./assets/avalanche9000-subnets.png y descomentar: -->
-<!-- ![Avalanche9000 — Builders Hub](./assets/avalanche9000-subnets.png) -->
+<!-- ========== ESPACIO PARA IMAGEN: Avalanche9000 / L1s ========== -->
+<!-- Guardar como ./assets/avalanche9000-l1s.png y descomentar: -->
+<!-- ![Avalanche9000 — Builders Hub](./assets/avalanche9000-l1s.png) -->
 
-| Inserte aquí imagen del Builders Hub (Avalanche9000 / Subnets) | [Builders Hub — Subnets](https://build.avax.network/docs) |
-|----------------------------------------------------------------|----------------------------------------------------------|
-| Guardar como `./assets/avalanche9000-subnets.png` | *Opcional* |
+| Inserte aquí imagen del Builders Hub (Avalanche9000 / L1s) | [Builders Hub — L1s](https://build.avax.network/docs) |
+|-----------------------------------------------------------|------------------------------------------------------|
+| Guardar como `./assets/avalanche9000-l1s.png` | *Opcional* |
 
 ---
 
-## 3. Subnet-EVM: tu blockchain EVM en una subnet
+## 3. Subnet-EVM: tu blockchain EVM (tu L1)
 
-**Subnet-EVM** es una implementación de la EVM que corre como blockchain dentro de una subnet. Permite:
+**Subnet-EVM** es la implementación de la EVM que usas para **tu L1**: la blockchain que corre sobre una subnet de validadores. Permite:
 
 - Mismo modelo de contratos que en C-Chain (Solidity).
 - **Gas y fees configurables** (incluso token nativo propio).
@@ -217,16 +219,16 @@ sequenceDiagram
     participant Dev as Tú
     participant CLI as Avalanche CLI
     participant PChain as P-Chain (Fuji/local)
-    participant Subnet as Tu Subnet
+    participant Subnet as Tu L1 (subnet)
     participant Blockchain as Tu Blockchain EVM
 
-    Dev->>CLI: avalanche subnet create miSubnet
+    Dev->>CLI: avalanche subnet create miL1
     CLI->>Dev: Elige VM → Subnet-EVM
     CLI->>Dev: Tipo de validadores (POA / POS)
     CLI->>Dev: Dirección controladora
     Dev->>CLI: Configuración lista
 
-    Dev->>CLI: avalanche subnet deploy miSubnet
+    Dev->>CLI: avalanche subnet deploy miL1
     CLI->>Dev: ¿Dónde? Local / Fuji / Mainnet
     Dev->>CLI: Local
 
@@ -242,14 +244,14 @@ sequenceDiagram
 
 | Paso | Comando / acción | Descripción |
 |------|------------------|-------------|
-| 1 | `avalanche subnet create <nombre>` | Inicia el asistente de creación. |
+| 1 | `avalanche subnet create <nombre>` | Inicia el asistente para crear tu L1. |
 | 2 | Elegir **Subnet-EVM** | VM para tu L1 compatible con EVM. |
 | 3 | Elegir **Proof of Authority** (o PoS) | PoA es más simple para desarrollo local. |
 | 4 | **Dirección controladora** | Quién puede añadir/quitar validadores. En local se suele usar clave "ewoq" (¡nunca en testnet/mainnet!). |
-| 5 | `avalanche subnet deploy <nombre>` | Despliega la subnet (local, Fuji o Mainnet). |
+| 5 | `avalanche subnet deploy <nombre>` | Despliega tu L1 (local, Fuji o Mainnet). |
 | 6 | Conectar wallet | Añadir en Core/MetaMask la red con el RPC y Chain ID que muestre la CLI. |
 
-### Diagrama: estados de tu subnet
+### Diagrama: estados de tu L1
 
 ```mermaid
 stateDiagram-v2
@@ -261,7 +263,7 @@ stateDiagram-v2
     Local --> BlockchainActiva: Nodo + blockchain corriendo
     Fuji --> BlockchainActiva: Validadores en Fuji
     Mainnet --> BlockchainActiva: Validadores en Mainnet
-    BlockchainActiva --> [*]: Red en producción
+    BlockchainActiva --> [*]: L1 en producción
 ```
 
 ### Después del despliegue local
@@ -278,7 +280,7 @@ stateDiagram-v2
 flowchart TB
     subgraph Conceptos["Conceptos clave"]
         A[Red Primaria: P, X, C]
-        B[Subnet = conjunto de validadores]
+        B[L1 = blockchain + subnet de validadores]
         C[Blockchain = VM + reglas]
     end
 
@@ -305,9 +307,9 @@ flowchart TB
 
 ## Checklist
 
-- [ ] Entender la diferencia entre Red Primaria, subnet y blockchain.
-- [ ] Saber cuándo tiene sentido crear tu propia subnet (gas, soberanía, compliance).
-- [ ] Haber revisado la documentación de Subnets y Avalanche9000 en Docs / Builders Hub.
+- [ ] Entender la diferencia entre Red Primaria, L1 y blockchain (y el papel de la subnet).
+- [ ] Saber cuándo tiene sentido crear tu propia L1 (gas, soberanía, compliance).
+- [ ] Haber revisado la documentación de L1s y Avalanche9000 en Docs / Builders Hub.
 - [ ] Avalanche CLI instalado y al menos un intento de `subnet create` + `subnet deploy` (local o Fuji).
 - [ ] Anotar dudas para la sesión de Teleporter y AWM.
 
@@ -315,7 +317,7 @@ flowchart TB
 
 ## Enlaces útiles
 
-- [Subnets — Docs Avalanche](https://docs.avax.network/subnets)
+- [Subnets (concepto técnico) — Docs Avalanche](https://docs.avax.network/subnets)
 - [Builders Hub — CLI](https://build.avax.network/docs/tooling/cli-commands)
 - [Create & Deploy Subnet — Docs](https://docs.avax.network/tooling/cli-create-deploy-subnets/create-subnet)
 - [Avalanche CLI — GitHub](https://github.com/ava-labs/avalanche-cli)

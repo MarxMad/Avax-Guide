@@ -28,7 +28,7 @@ flowchart LR
 |--------|--------|-----------|
 | **Problema y usuarios** | 1–2 min | Qué dolor resuelves y para quién (alineado con tu Lean Canvas). |
 | **Solución y demo en vivo** | 3–5 min | Conectar wallet, mostrar flujo en Fuji (o mainnet): “el usuario hace X y ocurre Y”. |
-| **Stack técnico** | ~1 min | Contratos (Fuji/Snowtrace), frontend, subnets/Teleporter si aplica. |
+| **Stack técnico** | ~1 min | Contratos (Fuji/Snowtrace), frontend, L1/Teleporter si aplica. |
 | **Siguientes pasos** | ~1 min | Mainnet, grants, comunidad, mejoras técnicas. |
 | **Preguntas del panel** | Resto | Responder con claridad; si no sabes algo, dilo y anótalo para después. |
 
@@ -62,13 +62,13 @@ flowchart TD
 
 ## 3. Programas de Grants
 
-El ecosistema Avalanche ofrece **grants** y **hackathons** para proyectos que construyan en la red, subnets o con Teleporter.
+El ecosistema Avalanche ofrece **grants** y **hackathons** para proyectos que construyan en la red, **L1s** o con Teleporter.
 
 ```mermaid
 flowchart TB
     A[Tu MVP / idea] --> B{¿Qué tipo de proyecto?}
     B -->|dApp en C-Chain| C[Grants generales]
-    B -->|Subnet / L1 / Teleporter| D[Grants Subnets / ICM]
+    B -->|L1 / Teleporter| D[Grants L1s / ICM]
     B -->|Hackathon| E[Premios + seguimiento]
     C --> F[avax.network/developers]
     D --> F
@@ -127,7 +127,7 @@ flowchart LR
 
 ## ¡Felicidades!
 
-Has completado el **Bootcamp Avalanche**: desde fundamentos y C-Chain hasta subnets, interoperabilidad, prototipo, Lean Canvas, seguridad y Demo Day. Sigue construyendo en la red más rápida del mundo y forma parte del ecosistema **CriptoUNAM** y **Avalanche**.
+Has completado el **Bootcamp Avalanche**: desde fundamentos y C-Chain hasta L1s, interoperabilidad, prototipo, Lean Canvas, seguridad y Demo Day. Sigue construyendo en la red más rápida del mundo y forma parte del ecosistema **CriptoUNAM** y **Avalanche**.
 
 ---
 

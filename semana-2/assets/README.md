@@ -7,7 +7,7 @@ Las guías de la Semana 2 dejan espacio para imágenes de referencia del **Avala
 ## Enlaces útiles
 
 - **Builders Hub — Docs:** https://build.avax.network/docs  
-- **Subnets / CLI:** https://build.avax.network/docs/tooling/cli-commands  
+- **Subnets / L1s:** https://build.avax.network/docs/tooling/cli-commands  
 - **Create & Deploy L1s:** https://build.avax.network/docs/tooling/avalanche-cli/create-deploy-avalanche-l1s  
 - **AWM — Dataflow:** https://build.avax.network/academy/interchain-messaging/08-avalanche-warp-messaging/05-dataflow  
 - **Teleporter — Getting Started:** https://build.avax.network/docs/cross-chain/teleporter/getting-started  
@@ -26,7 +26,7 @@ Las guías de la Semana 2 dejan espacio para imágenes de referencia del **Avala
 
 | Archivo | Uso en guía |
 |---------|-------------|
-| `avalanche9000-subnets.png` | Sesión 1 — Arquitectura Avalanche9000 / Subnets |
+| `avalanche9000-l1s.png` | Sesión 1 — Arquitectura Avalanche9000 / L1s |
 | `awm-dataflow.png` | Sesión 2 — Flujo de datos de AWM |
 
 Si no añades estos archivos, las guías siguen siendo útiles: los diagramas Mermaid y el texto explican el contenido.

@@ -31,8 +31,8 @@ Lista de software y servicios útiles para el bootcamp.
 ## Redes locales y nodos
 
 - **Anvil** (Foundry) — EVM local para pruebas.
-- **Avalanche CLI** — Crear y gestionar subnets locales.
-- **Subnet-EVM** — Blockchain EVM para correr como subnet.
+- **Avalanche CLI** — Crear y gestionar tu L1 (subnet) local.
+- **Subnet-EVM** — VM para tu L1 EVM.
 
 ---
 

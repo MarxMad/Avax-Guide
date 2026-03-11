@@ -54,7 +54,7 @@ Avax-Guide/
 │   ├── enlaces.md
 │   └── herramientas.md
 ├── semana-1/                 # Fundamentos y C-Chain
-├── semana-2/                 # Subnets e interoperabilidad
+├── semana-2/                 # L1s e interoperabilidad
 ├── semana-3/                 # MVP y frontend
 └── semana-4/                 # Seguridad y Demo Day
 ```
