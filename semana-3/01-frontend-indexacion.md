@@ -2,30 +2,30 @@
 
 **Fecha:** 16 de marzo  
 **Instructor:** Gerardo Vela  
-**Tema:** Prototipo desde V0: contrato con Foundry, despliegue en Fuji, integración frontend (Ethers/Viem) con Cursor o Antigravity.
+**Tema:** Prototipo con **v0** (Vercel): contrato con Foundry, despliegue en Fuji, frontend generado en **Next.js** con v0 e integración con Ethers (Cursor para conectar wallet y contrato).
 
 ---
 
 ## Objetivos de la sesión
 
-- Arrancar el **prototipo desde V0**: contrato mínimo → desplegar con **Foundry** en Fuji → frontend que lo use.
-- Escribir y desplegar contratos con Foundry; usar **Cursor** (o Antigravity) para acelerar la integración y el código del frontend.
-- Conectar un frontend mínimo a la C-Chain (Fuji), leer y escribir en tu contrato, y conectar wallet (Core / MetaMask).
+- Arrancar el **prototipo** con **v0** ([v0.app](https://v0.app/)): contrato en Foundry → desplegar en Fuji → frontend en **Next.js** generado con v0 → añadir integración con Ethers y wallet.
+- Usar **v0 by Vercel** para generar la UI (Next.js); **Cursor** para añadir la lógica Web3 (Ethers, dirección del contrato, conexión a Fuji).
+- Conectar wallet (Core / MetaMask) y probar lectura/escritura del contrato en Fuji.
 
 ---
 
-## 1. Prototipo V0 — Flujo en 4 pasos
+## 1. Prototipo con v0 — Flujo en 4 pasos
 
-1. **Contrato mínimo** en Foundry (Solidity).
-2. **Desplegar a Fuji** con `forge create` o script.
-3. **Frontend mínimo** (React + Vite + Ethers) que lee y escribe en ese contrato.
-4. **Conectar wallet** y probar en Fuji.
+1. **Contrato mínimo** en Foundry (Solidity) y **desplegar a Fuji** con `forge create`.
+2. **Frontend con v0:** generar la UI en [v0.app](https://v0.app/) (te da un proyecto **Next.js**). Descargar o clonar el código.
+3. **Integrar Web3** en ese Next.js: Ethers.js, dirección del contrato, ABI, y componentes para leer/escribir y conectar wallet. Aquí **Cursor** te ayuda a pegar y adaptar la lógica.
+4. **Conectar wallet** (Core / MetaMask) y cambiar a Fuji; probar en vivo.
 
-Herramientas recomendadas para codear rápido: **Cursor** (IDE con IA) para contratos y frontend; **Antigravity** si lo usas para vibe coding / flujo de desarrollo.
+**v0** es la plataforma de Vercel para crear frontends con IA; el resultado es **Next.js**. Luego tú añades la capa blockchain (Ethers + Fuji + tu contrato).
 
 ---
 
-## 2. V0 — Paso 1: Contrato mínimo con Foundry
+## 2. Paso 1: Contrato mínimo con Foundry
 
 ### Inicializar proyecto Foundry
 
@@ -59,7 +59,7 @@ forge build
 
 ---
 
-## 3. V0 — Paso 2: Desplegar en Fuji con Foundry
+## 3. Paso 2: Desplegar en Fuji con Foundry
 
 ### Variables de entorno
 
@@ -91,31 +91,27 @@ Con eso tienes **contrato en Fuji** y dirección lista para el frontend.
 
 ---
 
-## 4. V0 — Paso 3: Frontend mínimo (React + Vite + Ethers)
+## 4. Paso 3: Frontend con v0 (Next.js) + integración Ethers
 
-### Crear proyecto
+### Generar la UI con v0
 
-```bash
-npm create vite@latest avax-v0-frontend -- --template react
-cd avax-v0-frontend
-npm install
-npm install ethers
-```
+- Entra en **[v0.app](https://v0.app/)** (v0 by Vercel).
+- Describe la interfaz que quieres (p. ej. “página con título, un texto que muestre un mensaje, un input y un botón para actualizar, y un botón para conectar wallet”).
+- v0 te genera un proyecto **Next.js**. Descarga o clona el código en tu máquina.
 
-### Configuración Fuji
+### Añadir integración con Avalanche (Fuji) y tu contrato
 
-- **RPC:** `https://api.avax-test.network/ext/bc/C/rpc`
-- **Chain ID:** `43113`
+En ese proyecto Next.js:
 
-### Leer y escribir en el contrato
+- Instala Ethers: `npm install ethers`.
+- Configura **Fuji**: RPC `https://api.avax-test.network/ext/bc/C/rpc`, Chain ID `43113`.
+- Usa la **dirección** del contrato que desplegaste con Foundry y el **ABI** (desde `forge inspect HolaAvalanche abi` o `out/.../HolaAvalanche.json`).
 
-Necesitas la **dirección** del contrato desplegado y el **ABI**. Con Foundry puedes copiar el ABI desde `out/HolaAvalanche.sol/HolaAvalanche.json` (campo `abi`) o exportarlo:
+Con **Cursor** (o tu IDE) añade la lógica: provider, contrato (lectura de `mensaje()`), botón para `actualizarMensaje(...)`, y flujo de conexión de wallet + cambio a Fuji. Puedes pedirle a Cursor que genere los componentes o hooks que llamen a las funciones del contrato.
 
-```bash
-forge inspect HolaAvalanche abi
-```
+Necesitas la **dirección** del contrato desplegado y el **ABI**. Con Foundry: `forge inspect HolaAvalanche abi` o el campo `abi` en `out/HolaAvalanche.sol/HolaAvalanche.json`.
 
-Ejemplo mínimo en tu app (ajusta `CONTRACT_ADDRESS`):
+**Ejemplo de lógica** para pegar en tu Next.js (ajusta `CONTRACT_ADDRESS`):
 
 ```javascript
 import { ethers } from 'ethers';
@@ -141,11 +137,11 @@ const tx = await contractWrite.actualizarMensaje('Nuevo mensaje');
 await tx.wait();
 ```
 
-Usa **Cursor** (o Antigravity) para generar los componentes React que llamen a estas funciones (botón conectar wallet, mostrar `mensaje`, input + botón para `actualizarMensaje`).
+Sustituye en la UI generada por v0 los textos/datos estáticos por llamadas a `contract.mensaje()` y el botón por `actualizarMensaje(...)` usando el signer de la wallet conectada.
 
 ---
 
-## 5. V0 — Paso 4: Conectar wallet y cambiar a Fuji
+## 5. Paso 4: Conectar wallet y cambiar a Fuji
 
 - Llamar `eth_requestAccounts` para conectar.
 - Cambiar a Fuji con `wallet_switchEthereumChain` (chainId `43113`); si la red no existe, usar `wallet_addEthereumChain` con el RPC y block explorer de Fuji.
@@ -168,14 +164,14 @@ Si falla con código 4902, añade la red con `wallet_addEthereumChain` (mismo RP
 | Capa | Recomendado |
 |------|-------------|
 | **Contratos** | Foundry (escribir, compilar, desplegar) |
-| **Frontend** | React + Vite + Ethers.js v6 |
-| **IDE / flujo** | Cursor (o Antigravity para vibe coding) |
+| **Frontend** | **v0** ([v0.app](https://v0.app/)) → proyecto **Next.js**; luego integrar Ethers.js |
+| **Integración Web3** | Cursor para añadir Ethers, wallet y llamadas al contrato en el código de v0 |
 | **Wallet** | Core / MetaMask (window.ethereum) |
 | **Red** | Fuji (C-Chain) |
 
 ---
 
-## 7. Indexación básica (opcional para V0)
+## 7. Indexación básica (opcional)
 
 Para listar eventos sin escanear todos los bloques:
 
@@ -185,19 +181,19 @@ Para listar eventos sin escanear todos los bloques:
 
 ---
 
-## 8. Entregables de esta sesión (V0)
+## 8. Entregables de esta sesión
 
 - [ ] Proyecto **Foundry** con contrato mínimo y **desplegado en Fuji**.
-- [ ] Proyecto **React + Vite + Ethers** que **lee** y **escribe** en ese contrato.
+- [ ] Frontend generado con **v0** (Next.js), con **Ethers** integrado para leer y escribir en ese contrato.
 - [ ] **Conectar wallet** y cambio a **Fuji** desde la UI.
-- [ ] (Opcional) Usar **Cursor** o **Antigravity** para generar o refactorizar la integración frontend.
+- [ ] (Opcional) Usar **Cursor** para añadir o refactorizar la integración Web3 en el código que te da v0.
 
 ---
 
 ## Checklist técnico
 
 - [ ] Foundry: `forge build` y `forge create` a Fuji con contrato desplegado.
-- [ ] Frontend: provider Fuji, contrato con dirección + ABI, lectura (view) y una tx (write).
+- [ ] Frontend: proyecto **Next.js** (v0) con provider Fuji, contrato (dirección + ABI), lectura (view) y una tx (write).
 - [ ] Botón “Conectar wallet” y cambio a red Fuji.
 - [ ] Enlace a la tx o contrato en Fuji Snowtrace.
 
@@ -205,10 +201,11 @@ Para listar eventos sin escanear todos los bloques:
 
 ## Enlaces útiles
 
+- [v0 by Vercel](https://v0.app/) — Generar frontend en Next.js con IA
+- [Cursor](https://cursor.com/) — Integrar Ethers y wallet en el código de v0
 - [Foundry Book](https://book.getfoundry.sh/)
 - [Ethers.js v6](https://docs.ethers.org/v6/)
 - [Core Wallet](https://core.app/)
 - [Fuji Snowtrace](https://testnet.snowtrace.io/)
-- [Cursor](https://cursor.com/) · Antigravity (vibe coding / flujo de desarrollo)
 
 [← Teleporter](../semana-2/02-teleporter-awm.md) · [Volver al índice](../../README.md) · [Siguiente: Lean Canvas y equipos →](./02-lean-canvas-equipos.md)

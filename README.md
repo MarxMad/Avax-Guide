@@ -88,6 +88,7 @@ Cada carpeta `semana-N` contiene las guías por sesión (Markdown con diagramas 
 
 - [Enlaces oficiales y documentación](./recursos/enlaces.md)
 - [Herramientas recomendadas](./recursos/herramientas.md)
+- [Ideas de proyectos (L1 vs Mainnet)](./recursos/ideas-proyectos.md)
 
 ### 💧 Faucets (AVAX de prueba para Fuji)
 
