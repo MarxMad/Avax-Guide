@@ -6,6 +6,14 @@ Esta es la guía de referencia del **Bootcamp Avalanche**: 4 semanas, 8 sesiones
 
 ---
 
+## 🚀 Cómo usar esta guía
+
+- **Primera vez:** empieza por [Semana 1 - Sesión 1](./semana-1/01-fundamentos-core-wallet.md) (fundamentos y Core Wallet).
+- **Cada sesión** incluye objetivos, contenido, diagramas, checklists y enlaces a documentación oficial.
+- **Recursos centrales:** [enlaces](./recursos/enlaces.md) y [herramientas](./recursos/herramientas.md) en la carpeta `recursos/`.
+
+---
+
 ## 🛠️ ¿Qué lograrás?
 
 | Área | Contenido |
@@ -31,6 +39,19 @@ Esta es la guía de referencia del **Bootcamp Avalanche**: 4 semanas, 8 sesiones
 | **4** | 1 | 23 mar | QA, pruebas de estrés, seguridad | [Semana 4 - Sesión 1](./semana-4/01-seguridad-qa.md) |
 | **4** | 2 | 25 mar | Demo Day, Grants, certificados on-chain | [Semana 4 - Sesión 2](./semana-4/02-demo-day.md) |
 
+**En una línea:** Semana 1 = fundamentos y C-Chain · Semana 2 = L1s y cross-chain (AWM/Teleporter) · Semana 3 = prototipo frontend y Lean Canvas · Semana 4 = seguridad, QA y Demo Day.
+
+---
+
+## 👥 Instructores
+
+| Semana | Sesiones | Instructor |
+|--------|----------|------------|
+| 1 | 2 | Adrian Armenta (Sesión 2) |
+| 2 | 1 y 2 | Andrés Rodriguez |
+| 3 | 1 y 2 | Gerardo Vela |
+| 4 | 1 y 2 | Gerardo Vela |
+
 ---
 
 ## 📌 Detalles del evento
@@ -41,7 +62,7 @@ Esta es la guía de referencia del **Bootcamp Avalanche**: 4 semanas, 8 sesiones
 - **Costo:** Gratuito (cupo limitado)
 - **Certificación:** Certificados on-chain (POAPs/NFTs)
 
-**Requisito:** Laptop propia y conocimientos básicos de programación (preferiblemente JavaScript/Solidity).
+**Requisitos:** Laptop propia y conocimientos básicos de programación (preferiblemente JavaScript/Solidity). Para la Sesión 1 necesitas instalar [Core Wallet](https://core.app/); para la Sesión 2, Node.js (v18+) y Foundry o Hardhat (ver [herramientas](./recursos/herramientas.md)).
 
 ---
 
@@ -59,6 +80,8 @@ Avax-Guide/
 └── semana-4/                 # Seguridad y Demo Day
 ```
 
+Cada carpeta `semana-N` contiene las guías por sesión (Markdown con diagramas Mermaid, código y checklists).
+
 ---
 
 ## 🔗 Recursos rápidos
@@ -74,4 +97,6 @@ Avax-Guide/
 | Core Testnet Faucet | [core.app/tools/testnet-faucet](https://core.app/tools/testnet-faucet) |
 | Builder Hub — Testnet Faucet | [build.avax.network/console/primary-network/faucet](https://build.avax.network/console/primary-network/faucet) |
 
-*¡Construye en la red más rápida del mundo!* 🚀
+---
+
+*Guía mantenida por **CriptoUNAM**. ¡Construye en la red más rápida del mundo!* 🚀

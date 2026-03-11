@@ -2,276 +2,213 @@
 
 **Fecha:** 16 de marzo  
 **Instructor:** Gerardo Vela  
-**Tema:** Workshop técnico: frontend (Ethers.js / Viem), conexión a Fuji, indexación básica y **arranque del prototipo** para el MVP.
+**Tema:** Prototipo desde V0: contrato con Foundry, despliegue en Fuji, integración frontend (Ethers/Viem) con Cursor o Antigravity.
 
 ---
 
 ## Objetivos de la sesión
 
-- Montar un **frontend mínimo** conectado a la C-Chain (Fuji) y empezar el prototipo del MVP.
-- Usar **Ethers.js** o **Viem** para leer y escribir en contratos ya desplegados.
-- Implementar **conexión de wallet** (Core / MetaMask) y cambio a red Fuji.
-- Conocer opciones de **indexación** (eventos, Snowtrace, The Graph) para mejorar la UX del prototipo.
+- Arrancar el **prototipo desde V0**: contrato mínimo → desplegar con **Foundry** en Fuji → frontend que lo use.
+- Escribir y desplegar contratos con Foundry; usar **Cursor** (o Antigravity) para acelerar la integración y el código del frontend.
+- Conectar un frontend mínimo a la C-Chain (Fuji), leer y escribir en tu contrato, y conectar wallet (Core / MetaMask).
 
 ---
 
-## Por qué esta sesión va primero
+## 1. Prototipo V0 — Flujo en 4 pasos
 
-En la Semana 3 priorizamos **construir**: primero tienes un prototipo técnico funcionando (contrato + frontend en Fuji) y después alineas modelo de negocio y equipos (Sesión 2). Así el Lean Canvas y los roles se apoyan en algo tangible.
+1. **Contrato mínimo** en Foundry (Solidity).
+2. **Desplegar a Fuji** con `forge create` o script.
+3. **Frontend mínimo** (React + Vite + Ethers) que lee y escribe en ese contrato.
+4. **Conectar wallet** y probar en Fuji.
 
-```mermaid
-flowchart LR
-    A[Contrato en Fuji<br/>Semana 1-2] --> B[Frontend + Wallet<br/>Sesión 1]
-    B --> C[Prototipo usable]
-    C --> D[Lean Canvas + equipos<br/>Sesión 2]
-    D --> E[MVP para Demo Day]
-    style B fill:#0984e3,color:#fff
-    style C fill:#00b894,color:#fff
+Herramientas recomendadas para codear rápido: **Cursor** (IDE con IA) para contratos y frontend; **Antigravity** si lo usas para vibe coding / flujo de desarrollo.
+
+---
+
+## 2. V0 — Paso 1: Contrato mínimo con Foundry
+
+### Inicializar proyecto Foundry
+
+```bash
+forge init avax-v0 --no-commit
+cd avax-v0
+```
+
+### Contrato mínimo (ejemplo)
+
+Crea o edita `src/HolaAvalanche.sol`:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+contract HolaAvalanche {
+    string public mensaje = "Hola Avalanche desde CriptoUNAM";
+
+    function actualizarMensaje(string calldata _nuevo) external {
+        mensaje = _nuevo;
+    }
+}
+```
+
+Compilar y comprobar:
+
+```bash
+forge build
 ```
 
 ---
 
-## 1. Stack recomendado para el prototipo
+## 3. V0 — Paso 2: Desplegar en Fuji con Foundry
 
-| Capa | Opción A | Opción B |
-|------|----------|----------|
-| **Framework** | React + Vite | Next.js |
-| **Librería blockchain** | Ethers.js v6 | Viem |
-| **Wallet** | Core / MetaMask (window.ethereum) | Wagmi + RainbowKit (opcional) |
-| **Red** | Fuji (C-Chain) | Fuji + tu L1 (si aplica) |
+### Variables de entorno
 
-Para avanzar rápido, **React + Vite + Ethers** (o Viem) es suficiente. Wagmi/RainbowKit puedes añadirlos después si quieres mejor UX de conexión.
+Crea `.env` en la raíz del proyecto (y añade `.env` al `.gitignore`):
+
+```
+PRIVATE_KEY=tu_clave_privada_sin_0x
+```
+
+### Despliegue con forge create
+
+```bash
+forge create src/HolaAvalanche.sol:HolaAvalanche \
+  --rpc-url https://api.avax-test.network/ext/bc/C/rpc \
+  --private-key $PRIVATE_KEY
+```
+
+Anota la **dirección del contrato** que imprime el comando. Verifica la tx en [Fuji Snowtrace](https://testnet.snowtrace.io/).
+
+### (Opcional) Script de deploy
+
+Puedes usar un script para reutilizar el deploy:
+
+```bash
+forge script script/Deploy.s.sol --rpc-url https://api.avax-test.network/ext/bc/C/rpc --broadcast --private-key $PRIVATE_KEY
+```
+
+Con eso tienes **contrato en Fuji** y dirección lista para el frontend.
 
 ---
 
-## 2. Crear el proyecto e instalar dependencias
+## 4. V0 — Paso 3: Frontend mínimo (React + Vite + Ethers)
 
-### React + Vite
+### Crear proyecto
 
 ```bash
-npm create vite@latest mi-dapp-avax -- --template react
-cd mi-dapp-avax
+npm create vite@latest avax-v0-frontend -- --template react
+cd avax-v0-frontend
 npm install
 npm install ethers
 ```
 
-### Añadir Fuji a la app
+### Configuración Fuji
 
-Necesitas el **Chain ID** (`43113`) y el **RPC** de Fuji C-Chain:
+- **RPC:** `https://api.avax-test.network/ext/bc/C/rpc`
+- **Chain ID:** `43113`
 
-```
-https://api.avax-test.network/ext/bc/C/rpc
-```
+### Leer y escribir en el contrato
 
-```mermaid
-flowchart LR
-    subgraph App["Tu app"]
-        UI[React UI]
-        Ethers[ethers / viem]
-    end
-    Ethers --> RPC[RPC Fuji C-Chain]
-    Ethers --> Wallet[window.ethereum]
-    RPC --> Fuji[Fuji]
-    Wallet --> Core[Core / MetaMask]
+Necesitas la **dirección** del contrato desplegado y el **ABI**. Con Foundry puedes copiar el ABI desde `out/HolaAvalanche.sol/HolaAvalanche.json` (campo `abi`) o exportarlo:
+
+```bash
+forge inspect HolaAvalanche abi
 ```
 
----
-
-## 3. Provider y conexión a Fuji
-
-### Ethers v6 — Provider y Signer
+Ejemplo mínimo en tu app (ajusta `CONTRACT_ADDRESS`):
 
 ```javascript
 import { ethers } from 'ethers';
 
 const FUJI_RPC = 'https://api.avax-test.network/ext/bc/C/rpc';
 const FUJI_CHAIN_ID = 43113;
+const CONTRACT_ADDRESS = '0x...'; // la que te dio forge create
 
-// Solo lectura (sin wallet)
-export const provider = new ethers.JsonRpcProvider(FUJI_RPC);
+const ABI = [
+  'function mensaje() view returns (string)',
+  'function actualizarMensaje(string)',
+];
 
-// Con wallet (para firmar txs)
-export async function getSigner() {
-  if (!window.ethereum) throw new Error('Instala Core o MetaMask');
-  await window.ethereum.request({ method: 'eth_requestAccounts' });
-  await switchToFuji();
-  const providerWallet = new ethers.BrowserProvider(window.ethereum);
-  return providerWallet.getSigner();
-}
-
-async function switchToFuji() {
-  try {
-    await window.ethereum.request({
-      method: 'wallet_switchEthereumChain',
-      params: [{ chainId: ethers.toQuantity(FUJI_CHAIN_ID) }],
-    });
-  } catch (e) {
-    if (e.code === 4902) {
-      await window.ethereum.request({
-        method: 'wallet_addEthereumChain',
-        params: [{
-          chainId: ethers.toQuantity(FUJI_CHAIN_ID),
-          chainName: 'Avalanche Fuji',
-          nativeCurrency: { name: 'AVAX', symbol: 'AVAX', decimals: 18 },
-          rpcUrls: [FUJI_RPC],
-          blockExplorerUrls: ['https://testnet.snowtrace.io/'],
-        }],
-      });
-    } else throw e;
-  }
-}
-```
-
-### Viem (alternativa)
-
-```javascript
-import { createPublicClient, createWalletClient, http, custom } from 'viem';
-import { avalancheFuji } from 'viem/chains';
-
-const transport = typeof window !== 'undefined'
-  ? custom(window.ethereum)
-  : http('https://api.avax-test.network/ext/bc/C/rpc');
-
-export const publicClient = createPublicClient({
-  chain: avalancheFuji,
-  transport: http('https://api.avax-test.network/ext/bc/C/rpc'),
-});
-
-export const walletClient = createWalletClient({
-  chain: avalancheFuji,
-  transport: custom(window.ethereum),
-});
-```
-
----
-
-## 4. Leer y escribir en tu contrato
-
-Usas el **ABI** y la **dirección** del contrato que desplegaste en Semana 1 (o cualquier contrato en Fuji).
-
-### Lectura (view) — sin wallet
-
-```javascript
-import { ethers } from 'ethers';
-
-const CONTRACT_ADDRESS = '0x...'; // tu contrato en Fuji
-const ABI = ['function mensaje() view returns (string)'];
-
+// Solo lectura
 const provider = new ethers.JsonRpcProvider(FUJI_RPC);
 const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, provider);
 const mensaje = await contract.mensaje();
-console.log(mensaje);
-```
 
-### Escritura (tx) — con wallet
-
-```javascript
-const signer = await getSigner();
+// Escritura (con wallet conectada)
+const signer = await new ethers.BrowserProvider(window.ethereum).getSigner();
 const contractWrite = new ethers.Contract(CONTRACT_ADDRESS, ABI, signer);
-const tx = await contractWrite.actualizarMensaje('Nuevo mensaje desde el prototipo');
+const tx = await contractWrite.actualizarMensaje('Nuevo mensaje');
 await tx.wait();
-console.log('Tx confirmada:', tx.hash);
 ```
 
-### Flujo en el prototipo
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant UI
-    participant Wallet
-    participant Contract
-
-    User->>UI: Conectar wallet
-    UI->>Wallet: eth_requestAccounts + switchToFuji
-    Wallet-->>UI: Cuenta + red Fuji
-
-    User->>UI: Leer dato
-    UI->>Contract: contract.mensaje() (view)
-    Contract-->>UI: Valor
-    UI-->>User: Muestra dato
-
-    User->>UI: Enviar tx
-    UI->>Contract: actualizarMensaje(...)
-    Contract->>Wallet: Firma
-    Wallet-->>Contract: Tx enviada
-    Contract-->>UI: Receipt
-    UI-->>User: "Tx confirmada"
-```
+Usa **Cursor** (o Antigravity) para generar los componentes React que llamen a estas funciones (botón conectar wallet, mostrar `mensaje`, input + botón para `actualizarMensaje`).
 
 ---
 
-## 5. Conectar wallet en la UI
+## 5. V0 — Paso 4: Conectar wallet y cambiar a Fuji
 
-- **Conectar:** llamar `eth_requestAccounts` y luego `wallet_switchEthereumChain` a Fuji (o `wallet_addEthereumChain` si no tiene la red).
-- **Desconectar:** en un prototipo suele bastar con limpiar estado (cuenta = null).
-- **Cuenta y red:** guardar en estado (React `useState`) la dirección y el chainId; escuchar `accountsChanged` y `chainChanged` para actualizar la UI.
+- Llamar `eth_requestAccounts` para conectar.
+- Cambiar a Fuji con `wallet_switchEthereumChain` (chainId `43113`); si la red no existe, usar `wallet_addEthereumChain` con el RPC y block explorer de Fuji.
 
-Ejemplo mínimo de estado:
+Ejemplo de cambio a Fuji (Ethers v6):
 
 ```javascript
-const [account, setAccount] = useState(null);
-const [chainId, setChainId] = useState(null);
-
-useEffect(() => {
-  if (!window.ethereum) return;
-  window.ethereum.on('accountsChanged', (accounts) => setAccount(accounts[0] ?? null));
-  window.ethereum.on('chainChanged', (id) => setChainId(Number(id)));
-}, []);
+await window.ethereum.request({
+  method: 'wallet_switchEthereumChain',
+  params: [{ chainId: ethers.toQuantity(43113) }],
+});
 ```
+
+Si falla con código 4902, añade la red con `wallet_addEthereumChain` (mismo RPC y [testnet.snowtrace.io](https://testnet.snowtrace.io/) como blockExplorerUrls).
 
 ---
 
-## 6. Indexación básica para el prototipo
+## 6. Stack recomendado para el prototipo
 
-Para no escanear todos los bloques, puedes:
-
-| Enfoque | Cuándo usarlo |
-|---------|----------------|
-| **Eventos recientes (ethers)** | MVP: listar últimas N transacciones o eventos de tu contrato. |
-| **Snowtrace / API** | Consultas puntuales (balance, historial de una dirección). |
-| **The Graph** | Cuando necesites queries complejas o muchos eventos (más adelante). |
-
-### Eventos con Ethers (suficiente para empezar)
-
-```javascript
-const filter = contract.filters.MensajeActualizado(); // si tu contrato emite ese evento
-const fromBlock = 0; // o block actual - 1000
-const events = await contract.queryFilter(filter, fromBlock, 'latest');
-```
-
-Con eso ya puedes mostrar una lista de “últimas actualizaciones” en el prototipo.
+| Capa | Recomendado |
+|------|-------------|
+| **Contratos** | Foundry (escribir, compilar, desplegar) |
+| **Frontend** | React + Vite + Ethers.js v6 |
+| **IDE / flujo** | Cursor (o Antigravity para vibe coding) |
+| **Wallet** | Core / MetaMask (window.ethereum) |
+| **Red** | Fuji (C-Chain) |
 
 ---
 
-## 7. Entregables de esta sesión (prototipo mínimo)
+## 7. Indexación básica (opcional para V0)
 
-- [ ] Proyecto **React + Vite** (o Next) con **Ethers** o **Viem**.
+Para listar eventos sin escanear todos los bloques:
+
+- **Eventos con Ethers:** `contract.queryFilter(filter, fromBlock, 'latest')` si tu contrato emite eventos.
+- **Snowtrace:** para consultas puntuales (balance, historial).
+- **The Graph:** para más adelante cuando necesites queries complejas.
+
+---
+
+## 8. Entregables de esta sesión (V0)
+
+- [ ] Proyecto **Foundry** con contrato mínimo y **desplegado en Fuji**.
+- [ ] Proyecto **React + Vite + Ethers** que **lee** y **escribe** en ese contrato.
 - [ ] **Conectar wallet** y cambio a **Fuji** desde la UI.
-- [ ] **Leer** al menos un valor de un contrato desplegado en Fuji (view).
-- [ ] **Enviar** al menos una transacción (write) desde la UI y verla en [Fuji Snowtrace](https://testnet.snowtrace.io/).
-- [ ] (Opcional) Listar **eventos recientes** del contrato en la pantalla.
-
-Con esto tienes el **primer prototipo** listo para la Sesión 2, donde alinearás equipo, Lean Canvas y alcance del MVP para el Demo Day.
+- [ ] (Opcional) Usar **Cursor** o **Antigravity** para generar o refactorizar la integración frontend.
 
 ---
 
 ## Checklist técnico
 
-- [ ] Repo del frontend creado y dependencias instaladas.
-- [ ] Provider apuntando a Fuji C-Chain.
-- [ ] Botón “Conectar wallet” y detección de red (Fuji).
-- [ ] Lectura de un contrato (dirección + ABI).
-- [ ] Una acción que envíe una tx (ej. actualizar mensaje) y muestre el hash o enlace a Snowtrace.
+- [ ] Foundry: `forge build` y `forge create` a Fuji con contrato desplegado.
+- [ ] Frontend: provider Fuji, contrato con dirección + ABI, lectura (view) y una tx (write).
+- [ ] Botón “Conectar wallet” y cambio a red Fuji.
+- [ ] Enlace a la tx o contrato en Fuji Snowtrace.
 
 ---
 
 ## Enlaces útiles
 
+- [Foundry Book](https://book.getfoundry.sh/)
 - [Ethers.js v6](https://docs.ethers.org/v6/)
-- [Viem](https://viem.sh/) · [Viem — Avalanche chains](https://viem.sh/docs/chains.html)
-- [Core — Add to Wallet](https://docs.core.app/core-extension/add-to-core/)
+- [Core Wallet](https://core.app/)
 - [Fuji Snowtrace](https://testnet.snowtrace.io/)
-- [The Graph — Avalanche](https://thegraph.com/docs/en/supported-networks/avalanche/)
+- [Cursor](https://cursor.com/) · Antigravity (vibe coding / flujo de desarrollo)
 
 [← Teleporter](../semana-2/02-teleporter-awm.md) · [Volver al índice](../../README.md) · [Siguiente: Lean Canvas y equipos →](./02-lean-canvas-equipos.md)
